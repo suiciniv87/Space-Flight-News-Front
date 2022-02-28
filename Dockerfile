@@ -1,13 +1,16 @@
-FROM node:14.17.6
+FROM node:lts-alpine
 
-WORKDIR /spaceFront
+RUN npm install -g http-server
 
-ENV PORT 8080
+WORKDIR /app
 
-COPY package.json /spaceFront/package.json
+COPY package*.json ./
 
-RUN yarn install
+RUN npm install
 
-COPY . /spaceFront/
+COPY . .
 
-CMD ["yarn", "serve"]
+RUN npm run build
+
+EXPOSE 8080
+CMD [ "http-server", "dist" ]
